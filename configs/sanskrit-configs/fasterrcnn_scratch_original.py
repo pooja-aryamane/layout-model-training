@@ -2,7 +2,7 @@ from detectron2.config import get_cfg
 from detectron2 import model_zoo
 
 #datainitializations
-dataroot='./data'
+dataroot='./data/sanskrit'
 traindata=dataroot+'/train'
 testdata=dataroot+'/test'
 valdata=dataroot+'/val'
