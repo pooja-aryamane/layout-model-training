@@ -90,7 +90,7 @@ def get_layout_dicts(img_dir):
     return dataset_dicts
 
 for d in ["train", "val", "test"]:
-    DatasetCatalog.register("layout_" + d, lambda d=d: get_layout_dicts("dataset_synthetic" + d)) # set the path of the dataset
+    DatasetCatalog.register("layout_" + d, lambda d=d: get_layout_dicts("data/sanskrit_synthetic/" + d)) # set the path of the dataset
     MetadataCatalog.get("layout_" + d).set(thing_classes=["Text","Math","Table","Image"])
 layout_metadata = MetadataCatalog.get("layout_train")
 
