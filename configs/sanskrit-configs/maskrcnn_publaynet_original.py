@@ -1,7 +1,7 @@
 from detectron2.config import get_cfg
 
 #datainitializations
-dataroot='./data'
+dataroot='./data/sanskrit'
 traindata=dataroot+'/train'
 testdata=dataroot+'/test'
 valdata=dataroot+'/val'
