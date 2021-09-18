@@ -12,7 +12,7 @@ from detectron2 import model_zoo
 import os
 
 #datainitializations
-dataroot='./data'
+dataroot='./data/sanskrit'
 traindata=dataroot+'/train'
 testdata=dataroot+'/test'
 valdata=dataroot+'/val'
