@@ -18,8 +18,6 @@ parser.add_argument("-data", type=str, help="Which data do you want to train wit
 parser.add_argument("-log", default="log/trainlog.log", type=str, help="Path to log file. Default [log/trainlog.log]")
 
 args = parser.parse_args()
-
-setup_logger(args.log)
     
 specs = args.model+"_"+args.train_type+"_"+args.data
 
@@ -33,6 +31,8 @@ except AttributeError:
 for attr in attrlist:
     globals()[attr] = getattr (m, attr)
     
+setup_logger(args.log)
+
 register_coco_instances("train_data", {}, trainjson, trainimages)
 register_coco_instances("test_data", {}, testjson, testimages)
 register_coco_instances("val_data", {}, valjson, valimages)
