@@ -8,6 +8,9 @@ from detectron2.engine import DefaultTrainer
 from detectron2.evaluation import COCOEvaluator
 from detectron2.config import get_cfg
 from detectron2 import model_zoo
+import sys
+sys.path.insert(0,'configs/sanskrit-configs')
+
 
 #args init
 parser = argparse.ArgumentParser()
@@ -23,9 +26,9 @@ setup_logger(args.log)
     
 specs = args.model+"_"+args.train_type+"_"+args.data
 
-config_specs = "configs."+specs
-
-m = __import__ (config_specs)
+print("specs : ",specs)
+#os.system('python'+specs+'.py')
+m = __import__ (specs)
 try:
     attrlist = m.__all__
 except AttributeError:
