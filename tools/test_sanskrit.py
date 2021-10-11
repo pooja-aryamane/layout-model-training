@@ -119,6 +119,7 @@ if __name__ == "__main__":
     cfg.SOLVER.MAX_ITER = 10    
     cfg.SOLVER.STEPS = []        # do not decay learning rate
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 10  #(default: 512)
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
     
     with open(args.json_annotation_test, 'r') as fp:
         annot_file = json.load(fp)
