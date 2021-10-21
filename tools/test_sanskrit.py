@@ -41,7 +41,9 @@ class Trainer(DefaultTrainer):
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name, output_folder=None):
-        evaluator = COCOEvaluator(dataset_name)
+        if output_folder is None:
+          output_folder = cfg.OUTPUT_DIR
+        evaluator = COCOEvaluator(dataset_name, cfg, False, output_folder)
         val_loader = build_detection_test_loader(cfg, dataset_name)
         results=inference_on_dataset(trainer.model,val_loader,evaluator)
         pd.DataFrame(results).to_csv(f'{cfg.OUTPUT_DIR}/eval.csv')
