@@ -130,7 +130,6 @@ if __name__ == "__main__":
     print("ROI Heads is taken as",cfg.MODEL.ROI_HEADS.NUM_CLASSES)
 
     cfg.TEST.EVAL_PERIOD = 1000
-    os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     trainer = DefaultTrainer(cfg) 
     #trainer = CocoTrainer(cfg)
     trainer.resume_or_load(resume=False)
