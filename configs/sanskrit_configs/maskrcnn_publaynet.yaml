@@ -1,4 +1,4 @@
-_BASE_: "mask_rcnn_X_101_32x8d_FPN_3x_publaynet.yaml"
+_BASE_: "../mask_rcnn_X_101_32x8d_FPN_3x_publaynet.yaml"
 MODEL:
   WEIGHTS: "https://www.dropbox.com/s/57zjbwv6gh3srry/model_final.pth?dl=1"
   ROI_HEADS:

@@ -34,7 +34,7 @@ specs = args.model+"_"+args.train_type
 print("specs : ",specs)
 #os.system('python'+specs+'.py')
 
-dataroot='./data'
+dataroot='./sanskrit-layout-gt-manual-old'
 traindata=dataroot+'/train'
 testdata=dataroot+'/test'
 valdata=dataroot+'/val'
@@ -67,7 +67,7 @@ class SanskritTrainer(DefaultTrainer):
 
 #load the config
 cfg = get_cfg()
-cfg.merge_from_file("configs/sanskrit_configs/"+specs+".yaml")
+cfg.merge_from_file("configs/sanskrit_configs/maskrcnn_publaynet.yaml")
 cfg.DATASETS.TRAIN=('train_data',)
 cfg.DATASETS.TEST=('val_data',)
 
