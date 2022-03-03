@@ -1,0 +1,3 @@
+[submodule "sanskrit-layout-gt-manual-old"]
+	path = sanskrit-layout-gt-manual-old
+	url = https://github.com/document-analysis-tools/sanskrit-layout-gt-manual-old.git

@@ -1,0 +1,1 @@
+python3 tools/train_sanskrit.py -train_type publaynet -model maskrcnn -data original -log log/traintest.log -batch_size 2 -output_folder output

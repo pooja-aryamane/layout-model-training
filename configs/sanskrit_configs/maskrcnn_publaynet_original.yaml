@@ -1,4 +1,4 @@
-_BASE_: "../DLA_mask_rcnn_X_101_32x8d_FPN_3x.yaml"
+_BASE_: "../../DLA_mask_rcnn_X_101_32x8d_FPN_3x.yaml"
 MODEL:
   WEIGHTS: ("/home/server/Documents/layout/layoutanalysis/diff_models/model_maskrcnn_publaynet_finetuned.pth")
   ROI_HEADS:
