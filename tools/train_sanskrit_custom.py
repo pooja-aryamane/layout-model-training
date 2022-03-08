@@ -164,7 +164,7 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check):
   cfg.MODEL.BACKBONE.FREEZE_AT = freeze_at
   cfg.SOLVER.MAX_ITER = iterations
   cfg.MODEL.RPN.NMS_THRESH = rpn_threshold
-  cfg.TEST.EVAL_PERIOD = 20
+  cfg.TEST.EVAL_PERIOD = 500
 
   check_loss = val_loss_check[0]
   loss_floor, loss_ceiling = val_loss_check[1], val_loss_check[2]
