@@ -160,7 +160,7 @@ def do_loss(cfg, model):
   mean_loss = np.mean(losses)
   return mean_loss
 
-def train_model(freeze_at,iterations,rpn_threshold, val_loss_check):
+def train_model(freeze_at,iterations,rpn_threshold, val_loss_check, train_round):
   cfg.MODEL.BACKBONE.FREEZE_AT = freeze_at
   cfg.SOLVER.MAX_ITER = iterations
   cfg.MODEL.RPN.NMS_THRESH = rpn_threshold
@@ -179,9 +179,15 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check):
   checkpointer = DetectionCheckpointer(
           model, cfg.OUTPUT_DIR, optimizer=optimizer, scheduler=scheduler
       )
-  start_iter = (
-          checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
-      )
+  if train_round == 0: 
+    start_iter = (
+            checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
+        )
+  else:
+    model_prev = "output/model_final_freezelayer"+str(freeze_at)+"_trainround"+str(trainround-1)+".pth"
+    start_iter = (
+            checkpointer.resume_or_load(model_prev, resume=resume).get("iteration", -1) + 1
+        )
   periodic_checkpointer = PeriodicCheckpointer(
           checkpointer, cfg.SOLVER.CHECKPOINT_PERIOD, max_iter=max_iter
       )
@@ -224,7 +230,7 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check):
           if (cfg.TEST.EVAL_PERIOD > 0 and (iteration + 1) % cfg.TEST.EVAL_PERIOD == 0 and iteration != max_iter - 1):
               results = do_evaluate(cfg, model)
               eval_list.append(results["bbox"])
-              
+              #checkpointer.save("model_"+str(train_round)+"_"+str(iteration))
               val_loss = do_loss(cfg, model)
               val_loss_list.append(val_loss)
 
@@ -237,8 +243,9 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check):
           if len(val_loss_list)>=check_loss:
               stop_flag = all(l >= loss_floor and l < loss_ceiling for l in val_loss_list[-int(check_loss):]) 
               if stop_flag: 
+                checkpointer.save("model_final_freezelayer"+str(freeze_at)+"_trainround"+str(trainround))
                 print("Stop Condition for training has been met.")
-                checkpointer.save("model_final_freezelayer"+str(freeze_at))
+                #checkpointer.save("model_final_freezelayer"+str(freeze_at))
                 break 
 
           periodic_checkpointer.step(iteration)
@@ -259,9 +266,9 @@ iterations = 0
 #first: checks loss computed for n iterations for the stop condition
 #second and third value are the loss lower and upper limits 
 val_loss_check = [5, 0, 0.40]
-for freeze_at in layers_count:
+for train_round, freeze_at in enumerate(layers_count):
   iterations=iterations_number[i]
   if(freeze_at == 0):
       cfg.SOLVER.BASE_LR = 0.0003  # pick a good LR
-  train_model(freeze_at,iterations,rpn_threshold[i], val_loss_check)
+  train_model(freeze_at,iterations,rpn_threshold[i], val_loss_check, train_round)
   i+=1
