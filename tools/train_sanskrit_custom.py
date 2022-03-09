@@ -169,7 +169,11 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check, train_round)
   check_loss = val_loss_check[0]
   loss_floor, loss_ceiling = val_loss_check[1], val_loss_check[2]
 
-  resume = True 
+  if train_round>0:
+      resume = True 
+  else:
+      resume = False
+
   model = build_model(cfg)
   model.train()
   optimizer = build_optimizer(cfg, model)
@@ -184,7 +188,7 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check, train_round)
             checkpointer.resume_or_load(cfg.MODEL.WEIGHTS, resume=resume).get("iteration", -1) + 1
         )
   else:
-    model_prev = "output/model_final_freezelayer"+str(freeze_at)+"_trainround"+str(trainround-1)+".pth"
+    model_prev = "output/model_final_freezelayer"+str(freeze_at)+"_trainround"+str(train_round-1)+".pth"
     start_iter = (
             checkpointer.resume_or_load(model_prev, resume=resume).get("iteration", -1) + 1
         )
@@ -243,12 +247,14 @@ def train_model(freeze_at,iterations,rpn_threshold, val_loss_check, train_round)
           if len(val_loss_list)>=check_loss:
               stop_flag = all(l >= loss_floor and l < loss_ceiling for l in val_loss_list[-int(check_loss):]) 
               if stop_flag: 
-                checkpointer.save("model_final_freezelayer"+str(freeze_at)+"_trainround"+str(trainround))
+
                 print("Stop Condition for training has been met.")
                 #checkpointer.save("model_final_freezelayer"+str(freeze_at))
                 break 
 
           periodic_checkpointer.step(iteration)
+      
+      checkpointer.save("model_final_freezelayer"+str(freeze_at)+"_trainround"+str(trainround))
 
 #test with few iterations - 
 #val_loss_check = [2,1.0,5.0] 
@@ -266,9 +272,11 @@ iterations = 0
 #first: checks loss computed for n iterations for the stop condition
 #second and third value are the loss lower and upper limits 
 val_loss_check = [5, 0, 0.40]
-for train_round, freeze_at in enumerate(layers_count):
+train_round=0
+for freeze_at in layers_count:
   iterations=iterations_number[i]
   if(freeze_at == 0):
       cfg.SOLVER.BASE_LR = 0.0003  # pick a good LR
   train_model(freeze_at,iterations,rpn_threshold[i], val_loss_check, train_round)
+  train_round+=1
   i+=1
