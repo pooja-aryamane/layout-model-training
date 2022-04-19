@@ -204,9 +204,9 @@ def maincall():
 
 #config_file = "/content/config/DLA_mask_rcnn_X_101_32x8d_FPN_3x.yaml"
   #model_file = "/content/models/model_final_trimmed.pth"
-    cfg = get_cfg()
 #cfg._open_cfg(config_file)
-    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml"))
+    cfg = get_cfg()
+    cfg.merge_from_file("configs/sanskrit_configs/fasterrcnn_publaynet_lp.yaml")
     cfg.DATASETS.TRAIN = ("train_data",)
     cfg.DATASETS.TEST = ('val_data',)
     cfg.INPUT.MAX_SIZE_TEST = 1247
@@ -214,7 +214,6 @@ def maincall():
     cfg.INPUT.MIN_SIZE_TEST = 743
     cfg.INPUT.MIN_SIZE_TRAIN = (743,)
     cfg.DATALOADER.NUM_WORKERS = 4
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml")  # Let training initialize from model zoo
     cfg.SOLVER.IMS_PER_BATCH = 4
     cfg.SOLVER.BASE_LR = 0.001 # pick a good LR
     cfg.SOLVER.STEPS = []        # do not decay learning rate
@@ -226,6 +225,7 @@ def maincall():
     cfg.SOLVER.MAX_ITER = 15000
     cfg.MODEL.RPN.NMS_THRESH = 0.5
     cfg.TEST.EVAL_PERIOD = 2000
+    cfg.OUTPUT_DIR = "output"
 
 
     
